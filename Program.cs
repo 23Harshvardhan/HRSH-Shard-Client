@@ -81,10 +81,18 @@ namespace HRSH_Shard_Client
             WebClient client = new WebClient();
             string reply = client.DownloadString(uri);
             string usrName = reply.Substring(0, reply.IndexOf(':'));
-            string cmd = reply.Substring(reply.IndexOf(':'), reply.Length - 2);
+            string cmd = reply.Substring(reply.IndexOf(':') + 1);
             if (usrName == "curUsr")
             {
-                //LogEntry("Executing command: " + cmd);
+                LogEntry("Executing command: " + cmd);
+                if(commandHandler.checkCommands(cmd))
+                {
+                    //Code to run command
+                }
+                else
+                {
+                    LogEntry("Command does not exist.");
+                }
             }
         }
     }

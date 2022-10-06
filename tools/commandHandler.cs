@@ -14,5 +14,13 @@ namespace HRSH_Shard_Client.tools
         {
             cmd.Add("ping");
         }
+
+        public static bool checkCommands(string command)
+        {
+            if(cmd.Contains(command))
+                return true;
+            else
+                return false;
+        }
     }
 }
