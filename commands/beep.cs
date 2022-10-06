@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.IO;
+
 namespace HRSH_Shard_Client.commands
 {
     public class beep : command
@@ -12,6 +14,8 @@ namespace HRSH_Shard_Client.commands
 
         public override string execute(string[] args)
         {
+            Program.LogEntry("Executing command beep.");
+
             if(args.Length == 0)
             {
                 Console.Beep();
