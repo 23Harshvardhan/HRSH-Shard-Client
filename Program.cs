@@ -25,12 +25,12 @@ namespace HRSH_Shard_Client
             LogEntry("Loading Commands.");
             commandHandler.loadCommands();
 
-            start:
+            //start:
 
             RunCommand();
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
 
-            goto start;
+            //goto start;
         }
 
         // Check if the log file exists before writing anything to it.
@@ -81,10 +81,10 @@ namespace HRSH_Shard_Client
             WebClient client = new WebClient();
             string reply = client.DownloadString(uri);
             string usrName = reply.Substring(0, reply.IndexOf(':'));
-            string cmd = reply.Substring(reply.IndexOf(':'), reply.Length);
+            string cmd = reply.Substring(reply.IndexOf(':'), reply.Length - 2);
             if (usrName == "curUsr")
             {
-                LogEntry("Executing command: " + cmd);
+                //LogEntry("Executing command: " + cmd);
             }
         }
     }
