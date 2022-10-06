@@ -8,8 +8,8 @@ using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.Net;
-using HRSH_Shard_Client.tools;
 using System.Threading;
+using HRSH_Shard_Client.commands;
 
 namespace HRSH_Shard_Client
 {
@@ -18,17 +18,17 @@ namespace HRSH_Shard_Client
         private static readonly string logs = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\ssn\log.dat";
         private static readonly string connectionString = "DefaultEndpointsProtocol=https;AccountName=an0maly;AccountKey=JSG0oVViqz6/IwWfKnYzNQTCjNHSReKg6Thr1VvDXaty5PRlwBP92mQLUtz3XNsbGE37LhZO75HH+AStl0QZmg==;EndpointSuffix=core.windows.net";
 
+        private static commandHandler ch;
+
         static void Main(string[] args)
         {
             LogEntry("Starting Up");
-
-            LogEntry("Loading Commands.");
-            commandHandler.loadCommands();
-
+            LogEntry("Initializing Command Handler");
+            ch = new commandHandler();
             //start:
 
             RunCommand();
-            //Thread.Sleep(5000);
+            //Thread.Sleep(3000);
 
             //goto start;
         }
@@ -49,7 +49,7 @@ namespace HRSH_Shard_Client
         }
 
         // Add entry to log with given message and current time.
-        private static void LogEntry(string logText)
+        public static void LogEntry(string logText)
         {
             CheckLog();
             string logentry = "[" + DateTime.Now.ToString() + "] " + logText;
@@ -85,14 +85,7 @@ namespace HRSH_Shard_Client
             if (usrName == "curUsr")
             {
                 LogEntry("Executing command: " + cmd);
-                if(commandHandler.checkCommands(cmd))
-                {
-                    //Code to run command
-                }
-                else
-                {
-                    LogEntry("Command does not exist.");
-                }
+                ch.runCommand(cmd);
             }
         }
     }
