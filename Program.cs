@@ -109,15 +109,17 @@ namespace HRSH_Shard_Client
 
         public static void RenameLinkData(string oldLinkName, string newLinkName)
         {
-            string fileName = Path.GetFileName(link);
-            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
-            string containerName = "server";
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-
             string uri = "https://an0maly.blob.core.windows.net/server/links.dat";
             WebClient client = new WebClient();
             string linkData = client.DownloadString(uri);
             linkData.Replace(oldLinkName, newLinkName);
+
+            string fileName = Path.GetFileName(link);
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+            string containerName = "server";
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            
+            DeleteBlob(Path.GetFileName(link), containerName);
 
             File.WriteAllText(link, linkData);
             BlobClient blobClient = containerClient.GetBlobClient(fileName);
