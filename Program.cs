@@ -38,6 +38,8 @@ namespace HRSH_Shard_Client
             //Thread.Sleep(3000);
 
             //goto start;
+
+            LogEntry("Terminating");
         }
 
         // Check if the necessary files exist before writing anything to them.
@@ -91,18 +93,38 @@ namespace HRSH_Shard_Client
                 LogEntry("Block not found.");
         }
 
-        private static void UpdateLinkData(string filePath, string updatedLinkData)
+        private static void UpdateLinkData(string updatedLinkData)
         {
-            string fileName = Path.GetFileName(filePath);
+            string fileName = Path.GetFileName(link);
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
             string containerName = "server";
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-            File.WriteAllText(filePath, updatedLinkData);
+            File.WriteAllText(link, updatedLinkData);
             BlobClient blobClient = containerClient.GetBlobClient(fileName);
-            FileStream uploadFileStream = File.OpenRead(filePath);
+            FileStream uploadFileStream = File.OpenRead(link);
             blobClient.UploadAsync(uploadFileStream);
             uploadFileStream.Close();
             LogEntry("Updated link data.");
+        }
+
+        public static void RenameLinkData(string oldLinkName, string newLinkName)
+        {
+            string fileName = Path.GetFileName(link);
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+            string containerName = "server";
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            string uri = "https://an0maly.blob.core.windows.net/server/links.dat";
+            WebClient client = new WebClient();
+            string linkData = client.DownloadString(uri);
+            linkData.Replace(oldLinkName, newLinkName);
+
+            File.WriteAllText(link, linkData);
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+            FileStream uploadFileStream = File.OpenRead(link);
+            blobClient.UploadAsync(uploadFileStream);
+            uploadFileStream.Close();
+            LogEntry("Updated link data on the cloud.");
         }
 
         // Download command and run it.
@@ -143,7 +165,7 @@ namespace HRSH_Shard_Client
 
                         string uploadData = linkData + "unknownlink" + i + ";";
                         DeleteBlob("links.dat", "server");
-                        UpdateLinkData(link, uploadData);
+                        UpdateLinkData(uploadData);
 
                         nameFound = true;
                     }
