@@ -15,6 +15,7 @@ namespace HRSH_Shard_Client.commands
             this.commands = new List<command>();
 
             this.commands.Add(new beep("beep"));
+            this.commands.Add(new renameLink("renameLink"));
         }
 
         public string runCommand(string cmd)

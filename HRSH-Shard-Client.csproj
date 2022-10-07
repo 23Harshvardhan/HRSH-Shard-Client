@@ -172,6 +172,7 @@
     <Compile Include="commands\beep.cs" />
     <Compile Include="commands\command.cs" />
     <Compile Include="commands\commandHandler.cs" />
+    <Compile Include="commands\renameLink.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
